@@ -26,6 +26,43 @@ import sys
 import re
 import json 
 
+archaic_rules = {
+    'ἀ': 'α',
+    'ἁ': 'α',
+    'ἄ': 'ά',
+    'ἐ': 'ε',
+    'ἑ': 'ε',
+    'ἔ': 'έ',
+    'ἡ': 'η',
+    'ἣ': 'ή',
+    'ἤ': 'ή',
+    'ἰ': 'ι',
+    'ἱ': 'ι',
+    'ὀ': 'ο',
+    'ὅ': 'ό',
+    'ὐ': 'υ',
+    'ὑ': 'υ',
+    'ὖ': 'ύ',
+    'ὰ': 'ά',
+    'ά': 'ά',
+    'ὲ': 'έ',
+    'έ': 'έ',
+    'ὴ': 'ή',
+    'ή': 'ή',
+    'ὶ': 'ί',
+    'ί': 'ί',
+    'ὸ': 'ό',
+    'ύ': 'ύ',
+    'ὼ': 'ώ',
+    'ᾤ': 'ώ',
+    'ᾶ': 'ά',
+    'ῆ': 'ή',
+    'ῖ': 'ί',
+    'ῦ': 'ύ',
+    'ῳ': 'ω',
+    'ῶ': 'ώ',
+    'ῷ': 'ώ',
+}
 
 punctuation = [";", "!", ":", "∙", "»", ","]
 
@@ -161,6 +198,10 @@ def process_word(word: str, basic_substitutes: dict = None, punctuation_to_keep 
         for char in punctuation:
             word = re.sub(char, " " + char + " ", word)
     word = re.sub(r"\s+", " ", word).strip()  # Remove redundant spaces
+
+    # remove archaic accents
+    word = word.translate(str.maketrans(''.join(archaic_rules.keys()), ''.join(archaic_rules.values())))
+
     return word
 
 
