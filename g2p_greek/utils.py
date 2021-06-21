@@ -191,7 +191,10 @@ def process_word(word: str, basic_substitutes: dict = None, punctuation_to_keep 
     word = re.sub(r"\?", " ? ", word)
     word = re.sub(r"•|∙|»", " ", word)
     if keep_only_chars_and_digits:
-        word = re.sub(r"[^\w\d{}]".format("".join(punctuation_to_keep)), " ", word)  # Keep only characters and digits
+        if punctuation_to_keep:
+            word = re.sub(r"(?![{}])[\W_]".format("".join(re.escape(p) for p in punctuation_to_keep)), " ", word)  # Keep only characters and digits
+        else:
+            word = re.sub(r"[\W_]", " ", word)  # Keep only characters and digits
     else:
         word = re.sub(r"\n", " \n ", word)
         word = re.sub(r"\t", " \t ", word)
